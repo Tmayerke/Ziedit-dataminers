@@ -172,7 +172,7 @@ if __name__ == '__main__':
 "B0-16" : ["NOOD0-2"]                                  ,
 "B0-17" : ["trap C0"]                                  ,
 "B0-18" : ["Hoofdingang"]                              ,
-"B0-19" : ["Cafetaria"]                                ,}
+"B0-19" : ["Cafetaria"]                                }
 
     lokalen = {x: [key] for key, value in l.items() for x in value}
     print(lokalen)
@@ -196,8 +196,8 @@ if __name__ == '__main__':
     print("Afstanden:", dijkstra_algorithm(test_graph_B3, "B3-1", "B3-17")[0])
 
 # graph = {node : [[lokalen], [buren], (coordinaten)]}
-    #TODO remove lokalen at some point (left ICE)
-  graph = {
+#TODO remove lokalen at some point (left ICE)
+graph = {
         "B3-1"  : [["B.3.309", "B.3.311"]                       , ["B3-2"]                   , (0.75, 1, 3)   ],
         "B3-2"  : [["NOOD3-1" , "B.3.310"]                      , ["B3-3", "B3-1"]           , (1.25, 1, 3)   ],
         "B3-3"  : [["B.3.305", "B.3.308"]                       , ["B3-4", "B3-2"]           , (1.25, 1.5, 3) ],
@@ -241,7 +241,7 @@ if __name__ == '__main__':
         "B1-5"  : [["B.1.302"]                                  , ["B1-6", "B1-4"]           , (1.25, 3.25, 1)],
         "B1-6"  : [["B.1.305", "B.1.300"]                       , ["B1-7", "B1-5"]           , (1.25, 3.75, 1)],
         "B1-7"  : [["B.1.210"]                                  , ["B1-8", "B1-9", "B1-6"]   , (1.25, 5, 1)],
-        "B1-8"  : [["trap B1"]                                  , ["B1-7", "B1-9", "trap B2", "trap B0"]           , (0.5, 6, 1)],
+        "B1-8"  : [["trap B1"]                                  , ["B1-7", "B1-9", "trap B2", "trap B0"], (0.5, 6, 1)],
         "B1-9"  : [["B.1.210", "B.1.221"]                       , ["B1-10", "B1-8", "B1-7"]  , (1.75, 5.5, 1)],
         "B1-10" : [["B.1.217"]                                  , ["B1-11", "B1-9"]          , (2.25, 5.5, 1)],
         "B1-11" : [["B.1.210", "B.1.208", "B.1.217", "B.1.215"] , ["B1-12", "B1-10"]         , (3.5, 5.5, 1)],
@@ -250,7 +250,7 @@ if __name__ == '__main__':
         "B1-14" : [["B.1.105", "B.1.103", "B.1.200", "B.1.107"] , ["B1-15", "B1-17", "B1-13"], (7.5, 5.5, 1)],
         "B1-15" : [["B.1.104"]                                  , ["B1-16", "B1-14"]         , (7.75, 3, 1)],
         "B1-16" : [["NOOD1-2"]                                  , ["B1-15"]                  , (8, 1, 1)],
-        "B1-17" : [["trap C1"]                                  , ["B1-14", "trap C0", "trap C2"]                  , (9, 5, 1)],
+        "B1-17" : [["trap C1"]                                  , ["B1-14", "trap C0", "trap C2"], (9, 5, 1)],
 
         "B0-1"  : [["B.0.309", "B.0.311"]                       , ["B0-2"]                   , (0.75, 1, 0)],
         "B0-2"  : [["NOOD0-1", "B.0.310"]                       , ["B0-3", "B0-1"]           , (1.25, 1, 0)],
@@ -273,24 +273,7 @@ if __name__ == '__main__':
         "B0-19" : [["Cafetaria"]                                , ["B0-18", "B0-17"]         , (14.25, 6.25, 0)]
     } # Hans zegt over nooduitgang-functie: vraag korste route naar een (nood)trap gebruik, noodtrap als eindnode.
 
-    
+dijkstra_algorithm(graph, startnode, endnode)
 
-    # x = {key: {value[1]: value[0] for _ in range(len(value[1]))} for key, value in graph_B3.items()}
-    # print(x)
-    #graph_B3[value[1][0]][2]
-
-    # Python code to demonstrate dictionary
-    # comprehension
-
-    # Lists to represent keys and values
-    keys = ['a', 'b', 'c', 'd', 'e']
-    values = [1, 2, 3, 4, 5]
-
-    # but this line shows dict comprehension here
-    myDict = {k: v for (k, v) in zip(keys, values)}
-
-    # We can use below too
-    # myDict = dict(zip(keys, values))
-
-    print(myDict)
-    # kleine lokaaltjes en lokalen die aan elkaar verbonden zijn hebben we genegeerd. Het is unlikely dat een klein lokaaltje wordt gebruikt voor een presentatie en een route die dwars door een ander lokaal gaat is in de meeste gevallen ongewest.
+print(myDict)
+# kleine lokaaltjes en lokalen die aan elkaar verbonden zijn hebben we genegeerd. Het is unlikely dat een klein lokaaltje wordt gebruikt voor een presentatie en een route die dwars door een ander lokaal gaat is in de meeste gevallen ongewest.
