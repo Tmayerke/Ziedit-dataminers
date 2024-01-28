@@ -3,6 +3,8 @@
 from typing import Tuple, Iterable
 from math import sqrt
 from collections import defaultdict
+import matplotlib.pyplot as plt
+from PIL import Image
 
 
 def euclidian_distance(point1: Iterable[float], point2: Iterable[float]) -> float:
@@ -233,6 +235,32 @@ if __name__ == '__main__':
     print("Volgorde van bezochte knopen:",  dijkstra_algorithm(graph, "B3-1", "B0-19")[1])
     print("Afstanden:",                     dijkstra_algorithm(graph, "B3-1", "B0-19")[2])
     print("Predecessors:",                  dijkstra_algorithm(graph, "B3-1", "B0-19")[3])
+
+    # plotting shortest path onto map (with chatGPT):
+    # Load your map image
+    map_img = Image.open('plattegrond_B3.png')
+
+    # Coordinates you want to plot (example coordinates)
+    coordinates = [graph[node][1][:2] for node in dijkstra_algorithm(graph, "B3-1", "B3-17")[0]]
+    print(coordinates)
+    coordinates_scaled = [(x*120, y*120) for x,y in coordinates]
+    print(coordinates_scaled)
+    # print(map(lambda x: x * 10 , coordinates))
+
+    # Separate the coordinates into x and y lists
+    x_coords, y_coords = zip(*coordinates_scaled)
+
+    # Create a plot
+    fig, ax = plt.subplots()
+
+    # Display the map image
+    ax.imshow(map_img)
+
+    # Plot the coordinates as a line and dots
+    ax.plot(x_coords, y_coords, 'ro-')  # 'ro-' plots red dots connected by a line
+
+    # Show the plot
+    plt.show()
 
     # Hans zegt over nooduitgang-functie: vraag korste route naar een (nood)trap gebruik, noodtrap als eindnode.
     # kleine lokaaltjes en lokalen die aan elkaar verbonden zijn hebben we genegeerd. Het is unlikely dat een klein lokaaltje wordt gebruikt voor een presentatie en een route die dwars door een ander lokaal gaat is in de meeste gevallen ongewest.
