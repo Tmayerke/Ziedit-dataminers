@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 
+EMERGENCY_DICT = {
+        3: {'NOOD3-1': ['B3-2'], 'trap B3': ['B3-8'], 'NOOD3-2': ['B3-16'], 'trap C3': ['B3-17']},
+        2: {'NOOD2-1': ['B2-2'], 'trap B2': ['B2-8'], 'NOOD2-2': ['B2-16'], 'trap C2': ['B2-17']},
+        1: {'NOOD1-1': ['B1-2'], 'trap B1': ['B1-8'], 'NOOD1-2': ['B1-16'], 'trap C1': ['B1-17']},
+        0: {'NOOD0-1': ['B0-2'], 'trap B0': ['B0-8'], 'NOOD0-2': ['B0-16'], 'trap C0': ['B0-17']}}
+
 def euclidian_distance(point1: Iterable[float], point2: Iterable[float]) -> float:
     """Calculate the euclidian distance between two points in space.
 
@@ -60,8 +66,13 @@ def dijkstra_algorithm(graph, startnode, endnode):
     while predecessor[endnode] != -1:
         shortest_path.insert(0, predecessor[endnode])
         endnode = predecessor[endnode]
-    return shortest_path, visited, distance, predecessor
+    return shortest_path, visited, distance, predecessor, distance[startnode] # only really need shortest_path, distance to end (int)
 
+def emergency_exit(floor: int): # or input schedule
+    # startnode = schedule[]
+    for exit in EMERGENCY_DICT[floor]:
+        for endnode in exit[n]:
+            dijkstra_algorithm(graph, endnode)[4]
 
 if __name__ == '__main__':
     # {lokaal : [node]}
@@ -233,8 +244,11 @@ if __name__ == '__main__':
     # TEST DIJKSTRA (voor nieuwe datastructuur):
     print("Korste weg:",                    dijkstra_algorithm(graph, "B3-1", "B0-19")[0])
     print("Volgorde van bezochte knopen:",  dijkstra_algorithm(graph, "B3-1", "B0-19")[1])
-    print("Afstanden:",                     dijkstra_algorithm(graph, "B3-1", "B0-19")[2])
+    print("Afstanden:",                     dijkstra_algorithm(graph, "B3-1", "B0-19")[2]["B0-19"])
     print("Predecessors:",                  dijkstra_algorithm(graph, "B3-1", "B0-19")[3])
+    print("Distance to endnode:",           dijkstra_algorithm(graph, "B3-1", "B0-19")[4])
+    print(dijkstra_algorithm(graph, "B3-1", "B0-19"))
+
 
     # plotting shortest path onto map (with chatGPT):
     # Load your map image
