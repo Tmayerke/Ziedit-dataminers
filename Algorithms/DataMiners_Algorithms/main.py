@@ -84,6 +84,8 @@ graph = {
         "B0-19" : [["B0-18", "B0-17"]         , (14.25, 6.25, 0)]
     }
 
+#een van de verticale verbindingen biedt alleen een trap. Deze functie verwijdert deze verbindingen
+#Zo worden invaliden gegarandeerd naar de lift verwezen
 invalid_graph = {}
 
 for key, value in graph.items():
