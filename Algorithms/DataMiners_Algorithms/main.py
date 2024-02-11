@@ -15,7 +15,7 @@ graph = {
         "B3-3"  : [["B3-4", "B3-2"]           , (1.25, 1.5, 3) ],
         "B3-4"  : [["B3-5", "B3-3"]           , (1.25, 2.5, 3) ],
         "B3-5"  : [["B3-6", "B3-4"]           , (1.25, 3.25, 3)],
-        "B3-6"  : [["B3-7", "B3-5"]           , (1.25, 3.75,3 )],
+        "B3-6"  : [["B3-7", "B3-5"]           , (1.25, 3.75, 3)],
         "B3-7"  : [["B3-8", "B3-9", "B3-6"]   , (1.25, 5, 3)   ],
         "B3-8"  : [["B3-7", "B3-9", "B2-8"]   , (0.5, 6, 3)    ],
         "B3-9"  : [["B3-10", "B3-8", "B3-7"]  , (1.75, 5.5, 3) ],
@@ -182,8 +182,8 @@ def dijkstra_algorithm(graph, startnode, endnode):
                     distance[neighbour] = distance[startnode] + dist
                     predecessor[neighbour] = startnode
         # zoek knoop met korste afstand, zet als nieuwe startnode
-        distance_not_visted = {k: v for k, v in distance.items() if k not in visited}
-        startnode = min(distance_not_visted, key=distance.get)
+        distance_not_visited = {k: v for k, v in distance.items() if k not in visited}
+        startnode = min(distance_not_visited, key=distance.get)
 
     # find shortest path through predecessors
     shortest_path = [endnode]
@@ -191,6 +191,7 @@ def dijkstra_algorithm(graph, startnode, endnode):
         shortest_path.insert(0, predecessor[endnode])
         endnode = predecessor[endnode]
     return shortest_path, visited, distance, predecessor, distance[startnode] # only really need shortest_path, distance to end (int)
+
 
 # geef tijd mee, krijg terug pad naar dichtsbijzijnde trap/noodtrap.
 def emergency_exit(time: datetime, schedule = SCHEDULE):
@@ -224,7 +225,7 @@ def map_path(path, image='plattegrond_B3.png'):
 
     # prepare coordinates
     coordinates = [graph[node][1][:2] for node in path]
-    coordinates_scaled = [(x*120, y*120) for x,y in coordinates]
+    coordinates_scaled = [(x*120+5, y*120-30) for x,y in coordinates]
     x_coords, y_coords = zip(*coordinates_scaled)
 
     # Create plot
@@ -236,6 +237,21 @@ def map_path(path, image='plattegrond_B3.png'):
     ax.text(x_coords[-1] + 20, y_coords[-1] + 20, "end", color='red')
 
     plt.show()
+
+def schedulestepper(schedule):
+    lokaal = next(iter(schedule.values()))  # take first lokaal in schedule
+    for entry in list(schedule.keys())[1:]:  # exclude 1st entry
+        user_input = input("Press Y to continue or E for emergency:")
+        if user_input == 'Y':
+            print(f"from: {lokaal} ({swapped_lokalen_dict[lokaal][0]})")
+            print(f"to: {schedule[entry]} ({swapped_lokalen_dict[schedule[entry]][0]})")
+            print('path: ', dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
+            map_path(dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
+            lokaal = schedule[entry]
+        elif user_input == 'E':
+            map_path(emergency_exit(entry))
+        else:
+            print("Please press either 'Y' or 'E'")
 
 if __name__ == '__main__':
     # TODO: pytests aanmaken voor dijkstra algoritme?
@@ -250,3 +266,5 @@ if __name__ == '__main__':
     # Emergency exit test
     print("emergency exit path: ", emergency_exit(datetime(2024, 2, 25, 9, 30)))
     map_path(emergency_exit(datetime(2024, 2, 25, 9, 30)))
+
+    schedulestepper(SCHEDULE)
