@@ -246,6 +246,8 @@ def schedulestepper(schedule):
             print(f"from: {lokaal} ({swapped_lokalen_dict[lokaal][0]})")
             print(f"to: {schedule[entry]} ({swapped_lokalen_dict[schedule[entry]][0]})")
             print('path: ', dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
+            print(f"distance: {dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[4] * 7:.0f} m")
+            print(f"estimated duration: {dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[4] * 7 * 0.88 /60:.2f} min")
             map_path(dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
             lokaal = schedule[entry]
         elif user_input == 'E':
