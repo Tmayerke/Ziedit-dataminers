@@ -215,7 +215,7 @@ def dijkstra_algorithm(graph, startnode, endnode):
         endnode = predecessor[endnode]
 
     
-    print("\nDijkstra Algorithm:")
+    print("\nAlgoritme Informatie:")
     print("Tijd:", elapsed_time)
     print("Geheugen verbruik - Current:", current / (1024 * 1024), "MB")
     print("Geheugen verbruik - Peak:", peak / (1024 * 1024), "MB")  
