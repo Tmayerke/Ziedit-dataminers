@@ -140,7 +140,7 @@ SCHEDULE = { datetime(2024, 2, 25, 9, 0) : "Hoofdingang",
              datetime(2024, 2, 25, 15, 0) : "B.3.302",
              datetime(2024, 2, 25, 16, 0) : "B.3.105",
              datetime(2024, 2, 25, 17, 30) : "Hoofdingang"
-             }  # TODO add coffee corner lounge for gaps in schedule
+             }
 
 EMERGENCY_DICT = {
         3: ['B3-2', 'B3-8', 'B3-16', 'B3-17'],
@@ -250,6 +250,7 @@ def map_path(path, image='plattegrond_B3.png'):
 
     plt.show()
 
+#doorloopt de entries in het schema en geeft een prompt voor iedere stap
 def schedulestepper(schedule):
     lokaal = next(iter(schedule.values()))  # take first lokaal in schedule
     for entry in list(schedule.keys())[1:]:  # exclude 1st entry
