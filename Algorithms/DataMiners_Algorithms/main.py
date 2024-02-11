@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from datetime import datetime, timedelta
 
-# TODO: missing lifts, bushalte fietstalling, parkeergarages.
 # graph = {node : [[buren], (coordinaten)]}
 graph = {
         "B3-1"  : [["B3-2"]                   , (0.75, 1, 3)   ],
@@ -84,6 +83,17 @@ graph = {
         "B0-18" : [["B0-17", "B0-19"]         , (10.5, 8, 0)],
         "B0-19" : [["B0-18", "B0-17"]         , (14.25, 6.25, 0)]
     }
+
+invalid_graph = {}
+
+for key, value in graph.items():
+    if key.endswith('8'):
+        new_values = [neighbor for neighbor in value[0] if not neighbor.endswith('8')]
+        invalid_graph[key] = [new_values, value[1]]
+    else:
+        invalid_graph[key] = value
+
+print(invalid_graph)
 
 # {lokaal: [node]}
 swapped_lokalen_dict = {'B.3.309': ['B3-1'], 'B.3.311': ['B3-1'], 'NOOD3-1': ['B3-2'], 'B.3.310': ['B3-2'],
