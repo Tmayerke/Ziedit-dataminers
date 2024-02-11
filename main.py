@@ -169,22 +169,25 @@ def euclidian_distance(point1: Iterable[float], point2: Iterable[float]) -> floa
         sum_squares += (x1-x2)**2
     return sqrt(sum_squares)
 
-def dijkstra_algorithm(graph, startnode, endnode):
+def dijkstra_algorithm(graph, startnode, endnode, num_iterations=100):
+    total_time = 0
+    total_memory = 0
     """Implementatie van dijkstra's algoritme conform de slides van week 4.
 
     Calculate the shortest path from a startnote to endnode of a given graph in the format {node: (neighbour, coordinates)}.
     Returns: (shortest_path, visited, distance, predecessor)
     """
-    tracemalloc.start()
+    for _ in range(num_iterations):
+        tracemalloc.start()
 
-    start_time = timeit.default_timer()
+        start_time = timeit.default_timer()
 
-    visited = []
-    distance = dict()    # {knoop: afstand(cumulative)}
-    predecessor = dict()   # {knoop: vorige_knoop}
+        visited = []
+        distance = dict()    # {knoop: afstand(cumulative)}
+        predecessor = dict()   # {knoop: vorige_knoop}
 
-    distance[startnode] = 0
-    predecessor[startnode] = -1
+        distance[startnode] = 0
+        predecessor[startnode] = -1
 
     while startnode != endnode:
         visited.append(startnode)
@@ -202,11 +205,14 @@ def dijkstra_algorithm(graph, startnode, endnode):
         distance_not_visited = {k: v for k, v in distance.items() if k not in visited}
         startnode = min(distance_not_visited, key=distance.get)
 
-    end_time = timeit.default_timer()
-    elapsed_time = end_time - start_time
+        end_time = timeit.default_timer()
+        elapsed_time = end_time - start_time
+        total_time += elapsed_time
 
-    current, peak = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+        current, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        total_memory += peak
+
 
     # find shortest path through predecessors
     shortest_path = [endnode]
@@ -215,11 +221,14 @@ def dijkstra_algorithm(graph, startnode, endnode):
         endnode = predecessor[endnode]
 
     
-    print("\nAlgoritme Informatie:")
-    print("Tijd:", elapsed_time)
-    print("Geheugen verbruik - Current:", current / (1024 * 1024), "MB")
-    print("Geheugen verbruik - Peak:", peak / (1024 * 1024), "MB")  
-    return shortest_path, visited, distance, predecessor, distance[startnode] # only really need shortest_path, distance to end (int)
+    average_time = total_time / num_iterations
+    average_memory = total_memory / num_iterations
+
+    print("\nAlgoritme Informatie (Gemiddeld over {} iteraties):".format(num_iterations))
+    print("Gemiddelde Tijd:", average_time)
+    print("Gemiddeld Geheugen verbruik - Peak:", average_memory / (1024 * 1024), "MB")
+    
+    return shortest_path, visited, distance, predecessor, distance[startnode]
     
 
 
@@ -288,12 +297,12 @@ def schedulestepper(schedule):
 if __name__ == '__main__':
     # TODO: pytests aanmaken voor dijkstra algoritme?
     # TEST DIJKSTRA:
-    print("Korste weg:",                    dijkstra_algorithm(graph, "B3-1", "B0-17")[0])
-    print("Volgorde van bezochte knopen:",  dijkstra_algorithm(graph, "B3-1", "B0-17")[1])
-    print("Afstanden:",                     dijkstra_algorithm(graph, "B3-1", "B0-17")[2])
-    print("Predecessors:",                  dijkstra_algorithm(graph, "B3-1", "B0-17")[3])
-    print("Distance to endnode:",           dijkstra_algorithm(graph, "B3-1", "B0-17")[4])
-    map_path(dijkstra_algorithm(graph, "B3-1", "B0-17")[0])
+    print("Korste weg:",                    dijkstra_algorithm(graph, "B3-1", "B3-17")[0])
+    print("Volgorde van bezochte knopen:",  dijkstra_algorithm(graph, "B3-1", "B3-17")[1])
+    print("Afstanden:",                     dijkstra_algorithm(graph, "B3-1", "B3-17")[2])
+    print("Predecessors:",                  dijkstra_algorithm(graph, "B3-1", "B3-17")[3])
+    print("Distance to endnode:",           dijkstra_algorithm(graph, "B3-1", "B3-17")[4])
+    map_path(dijkstra_algorithm(graph, "B3-1", "B3-17")[0])
 
     # Emergency exit test
     print("emergency exit path: ", emergency_exit(datetime(2024, 2, 25, 9, 30)))
