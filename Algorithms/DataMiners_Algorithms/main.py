@@ -225,7 +225,7 @@ def map_path(path, image='plattegrond_B3.png'):
 
     # prepare coordinates
     coordinates = [graph[node][1][:2] for node in path]
-    coordinates_scaled = [(x*120, y*120) for x,y in coordinates]
+    coordinates_scaled = [(x*120+5, y*120-30) for x,y in coordinates]
     x_coords, y_coords = zip(*coordinates_scaled)
 
     # Create plot
@@ -238,17 +238,20 @@ def map_path(path, image='plattegrond_B3.png'):
 
     plt.show()
 
-def schedulestepper(schedule, lokaal):
-    for entry in schedule.keys():
+def schedulestepper(schedule):
+    lokaal = next(iter(schedule.values()))  # take first lokaal in schedule
+    for entry in list(schedule.keys())[1:]:  # exclude 1st entry
         user_input = input("Press Y to continue or E for emergency:")
         if user_input == 'Y':
-            map_path(dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], schedule[entry])[0])
+            print(f"from: {lokaal} ({swapped_lokalen_dict[lokaal][0]})")
+            print(f"to: {schedule[entry]} ({swapped_lokalen_dict[schedule[entry]][0]})")
+            print('path: ', dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
+            map_path(dijkstra_algorithm(graph, swapped_lokalen_dict[lokaal][0], swapped_lokalen_dict[schedule[entry]][0])[0])
+            lokaal = schedule[entry]
         elif user_input == 'E':
             map_path(emergency_exit(entry))
-        else: break;
-
-
-
+        else:
+            print("Please press either 'Y' or 'E'")
 
 if __name__ == '__main__':
     # TODO: pytests aanmaken voor dijkstra algoritme?
@@ -263,4 +266,5 @@ if __name__ == '__main__':
     # Emergency exit test
     print("emergency exit path: ", emergency_exit(datetime(2024, 2, 25, 9, 30)))
     map_path(emergency_exit(datetime(2024, 2, 25, 9, 30)))
-    schedulestepper(SCHEDULE, "Lift C0")
+
+    schedulestepper(SCHEDULE)
